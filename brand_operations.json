@@ -1,0 +1,23 @@
+{
+    "title": "REDEECASH",
+    "subtitle": "PRESSPAGE ENTERTAINMENT INC",
+    "operations": [
+        {
+            "name": "Cryptocurrency non-custody payment processor.",
+            "description": "Accept cryptocurrency payments easier through the Redeecash Card Network"
+        },
+        {
+            "name": "Credit Reporting for Consumers without PII",
+            "description": "Accurate reporting with no PII maintained in the report. Inquiries are not factored into the scoring model. Paid collections are removed from report automatically. Good credit remains on the report indefinitely no matter how old. "
+        },
+        {
+            "name": "Credit Reporting for Business that is better than D&B",
+            "description": "No upselling for other credit products and business have access to their report and dispute errors just as consumer cans. Business credit reports are NOT regulated."
+        }
+    ],
+    "about": "Operating under Fincen Money Service Business (MSB) to provide non-custody payment processing of cryptocurrency.",
+    "services": "<ul><li>Cryptocurrency non-custody payment processing</li><li>Responsive Consumer and Business credit reporting</li><li>Credit score without factoring inquiries</li></ul>",
+    "year": "2019",
+    "sitename": "redeecash.presspage-entertainment.biz",
+    "email": "presspage.entertainment@gmail.com"
+}

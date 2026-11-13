@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brand Operations - Parent Corporation</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <style>
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        .nav-bar {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+        .nav-bar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .nav-bar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .main-content {
+            padding: 16px;
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="w3-container">
+        <div class="header" id="header">
+            <h1>Loading...</h1>
+            <p>Please wait</p>
+        </div>
+        <div class="w3-bar w3-green">
+            <a href="#" class="w3-bar-item" onclick="openTab('home')" style="text-decoration: none;">Home</a>
+            <a href="#" class="w3-bar-item" onclick="openTab('about')" style="text-decoration: none;">About</a>
+            <a href="#" class="w3-bar-item" onclick="openTab('services')" style="text-decoration: none;">Services</a>
+        </div> 
+
+        <div class="sections w3-container" id="home">
+            <h2>Welcome to our Brand Operations Portal</h2>
+            <p>Loading operations...</p>
+        </div>
+
+        <div class="sections w3-container" id="about" style="display: none;">
+            <h2>About</h2>
+            <p>Loading operations...</p>
+        </div>
+
+        <div class="sections w3-container" id="services" style="display: none;">
+            <h2>Services</h2>
+            <p>Loading operations...</p>
+        </div>
+        
+        <div id="message-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container w3-white">
+                    <h2 class="w3-blue">Message</h2>
+                    <p id="message-content"></p>
+                    <button class="w3-button w3-block w3-black" onclick="document.getElementById('message-dialog').style.display='none';">OK</button>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <br/><br/><br/>
+        <div class="footer">
+            <p id="footer-content">&copy; 2024 Parent Corporation. All rights reserved.</p>
+            <!-- Accessible footer -->
+            <div class="w3-dark-grey" role="contentinfo" aria-label="Website footer">
+                <div class="w3-content"> 
+                    <p class="w3-small" id="accessibility-info"> 
+                        <strong>Accessibility:</strong> PRESSPAGE ENTERTAINMENT INC is committed to improving accessibility across all websites and applications. If you experience difficulty accessing any content or need assistance, please contact us at <a href="mailto:accessibility@presspage-entertainment.biz?subject=Accessibility%20Support" class="w3-text-light-blue w3-hover-text-blue" aria-label="Email our accessibility contact at accessibility at presspage dash entertainment dot biz"> accessibility@presspage-entertainment.biz </a>. We welcome feedback as we continue enhancing accessibility for all users. 
+                    </p> 
+                </div> 
+            </div>
+            <!-- Last updated timestamp -->
+            <p class="w3-small w3-opacity" aria-label="Last updated date for this website"> Last Updated: <time id="last-updated" datetime=""></time> </p>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Get the browser's last modified timestamp 
+            const modified = new Date(document.lastModified); 
+            // Format for screen readers and visual users 
+            const options = { year: 'numeric', month: 'long', day: 'numeric' }; 
+            const formatted = modified.toLocaleDateString('en-US', options); 
+            // Update the <time> element 
+            const timeEl = document.getElementById('last-updated'); 
+            timeEl.textContent = formatted; 
+            timeEl.setAttribute('datetime', modified.toISOString().split('T')[0]);
+
+            fetch("brand_operations.json")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("HTTP error: " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+
+                    document.getElementById("header").innerHTML =
+                        "<h1>" + data.title + "</h1>" +
+                        "<p>" + data.subtitle + "</p>";
+
+                    var homeContent = document.getElementById("home");
+                    homeContent.innerHTML = "<h2>" + data.title + " Portal</h2>";
+                    homeContent.innerHTML += "<p>Here are our operations:</p>";
+
+                    for (var i = 0; i < data.operations.length; i++) {
+                        homeContent.innerHTML +=
+                            "<h3>" + data.operations[i].name + "</h3>" +
+                            "<p>" + data.operations[i].description + "</p>";
+                    }
+
+                    const year = new Date().getFullYear();
+                    let year_string = data.year;
+
+                    if (year > data.year) {
+                        year_string = `${data.year}-${year}`;
+                    }
+
+                    document.getElementById("footer-content").innerHTML =
+                        `&copy; ${year_string} ${data.subtitle.toUpperCase()} dba ${data.title.toUpperCase()}. All rights reserved.`;
+
+                    document.getElementById("about").innerHTML =
+                        `<h2>About</h2><br/>${data.about}`;
+
+                    document.getElementById("services").innerHTML =
+                        `<h2>Services</h2><br/>${data.services}`;
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const message = urlParams.get("message");
+
+                    if (message) {
+                        document.getElementById("message-content").textContent = message;
+                        document.getElementById("message-dialog").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading brand operations:", error);
+                });
+        }
+        function hide(all=false,element="") {
+            if (hide) {
+                document.getElementById("main-content").style.display = "none";
+                document.getElementById("about-content").style.display = "none";
+                document.getElementById("services-content").style.display = "none";
+                document.getElementById("contact-content").style.display = "none";
+            } else {
+                document.getElementById(element).style.display = "none";
+            }
+        }
+        function show(element) {
+            document.getElementById(element).style.display = "block";
+        }
+        function openTab(tabName) {
+            var i;
+            var x = document.getElementsByClassName("sections");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
+        function navButton(element) {
+            console.log(element);
+        }
+    </script>
+
+</body>
+</html>
